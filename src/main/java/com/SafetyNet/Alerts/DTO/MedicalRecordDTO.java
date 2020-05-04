@@ -1,15 +1,17 @@
-package com.SafetyNet.Alerts.Model;
+package com.SafetyNet.Alerts.DTO;
 
+import com.googlecode.jmapper.annotations.JGlobalMap;
+import org.springframework.stereotype.Component;
 
-
-import java.util.Date;
 import java.util.List;
 
-public class Medicalrecords {
+@Component
+@JGlobalMap
+public class MedicalRecordDTO {
 
     private String firstName;
     private String lastName;
-    private Date birthdate;
+    private String birthdate;
     private List<String> medications;
     private List<String> allergies;
 
@@ -29,11 +31,11 @@ public class Medicalrecords {
         this.lastName = lastName;
     }
 
-    public Date getBirthdate() {
+    public String getBirthdate() {
         return birthdate;
     }
 
-    public void setBirthdate(Date birthdate) {
+    public void setBirthdate(String birthdate) {
         this.birthdate = birthdate;
     }
 

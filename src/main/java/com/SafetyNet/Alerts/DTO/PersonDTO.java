@@ -1,11 +1,12 @@
-package com.SafetyNet.Alerts.Model;
+package com.SafetyNet.Alerts.DTO;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.googlecode.jmapper.annotations.JGlobalMap;
 import org.springframework.stereotype.Component;
 
 @Component
-public class Persons {
+@JGlobalMap
+public class PersonDTO {
+
     private String firstName;
     private String lastName;
     private String address;
@@ -13,11 +14,6 @@ public class Persons {
     private int zip;
     private String phone;
     private String email;
-
-
-
-    private Firestations firestations;
-    private Medicalrecords medicalrecords;
 
     public String getFirstName() {
         return firstName;
@@ -73,21 +69,5 @@ public class Persons {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public Firestations getFirestations() {
-        return firestations;
-    }
-
-    public void setFirestations(Firestations firestations) {
-        this.firestations = firestations;
-    }
-
-    public Medicalrecords getMedicalrecords() {
-        return medicalrecords;
-    }
-
-    public void setMedicalrecords(Medicalrecords medicalrecords) {
-        this.medicalrecords = medicalrecords;
     }
 }
