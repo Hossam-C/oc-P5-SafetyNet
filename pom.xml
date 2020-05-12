@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.2.6.RELEASE</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>com.SafetyNet</groupId>
+	<artifactId>Alerts</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>Alerts</name>
+	<description>Applications to send messages to emergency teams</description>
+
+	<properties>
+		<java.version>1.8</java.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+<!--		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-parent</artifactId>
+			<version>2.2.6.RELEASE</version>
+			<type>pom</type>
+		</dependency>-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-logging</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>junit</groupId>
+					<artifactId>junit</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>junit</groupId>
+					<artifactId>junit</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<!-- ************** Log4J : logger **************** -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-log4j2</artifactId>
+		</dependency>
+
+		<!-- ************** JUnit 5 **************** -->
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<version>5.6.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<version>5.6.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<version>5.5.1</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- ************** Jacoco **************** -->
+		<dependency>
+			<groupId>org.jacoco</groupId>
+			<artifactId>jacoco-maven-plugin</artifactId>
+			<version>0.8.5</version>
+			<type>maven-plugin</type>
+		</dependency>
+
+		<!-- ************** Maven Assembly Plugin **************** -->
+		<dependency>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-assembly-plugin</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+		<!-- ************** Surefire **************** -->
+		<dependency>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-surefire-report-plugin</artifactId>
+			<version>3.0.0-M4</version>
+		</dependency>
+		<!-- ************** Assert J **************** -->
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+			<version>3.14.0</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- ************** SpotBugs **************** -->
+		<dependency>
+			<groupId>com.github.spotbugs</groupId>
+			<artifactId>spotbugs</artifactId>
+			<version>3.1.8</version>
+		</dependency>
+		<!-- ************** Maven Infos-Reports **************** -->
+		<dependency>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-project-info-reports-plugin</artifactId>
+			<version>2.9</version>
+		</dependency>
+
+		<!-- ************** Mockito **************** -->
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-junit-jupiter</artifactId>
+			<version>2.23.4</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>3.1.0</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- ************* JMapper******************************* -->
+		<dependency>
+			<groupId>com.googlecode.jmapper-framework</groupId>
+			<artifactId>jmapper-core</artifactId>
+			<version>1.6.0.1</version>
+		</dependency>
+	</dependencies>
+
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>3.8.2</version>
+			</plugin>
+			<plugin>
+				<groupId>com.github.spotbugs</groupId>
+				<artifactId>spotbugs-maven-plugin</artifactId>
+				<version>3.1.8</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>2.17</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>jar-with-dependencies</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<archive>
+								<manifest>
+									<mainClass>
+										com.SafetyNet.Alerts.AlertsApplication
+									</mainClass>
+								</manifest>
+							</archive>
+							<descriptorRefs>
+								<descriptorRef>jar-with-dependencies</descriptorRef>
+							</descriptorRefs>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.22.0</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.junit.platform</groupId>
+						<artifactId>junit-platform-surefire-provider</artifactId>
+						<version>1.3.2</version>
+					</dependency>
+					<dependency>
+						<groupId>org.junit.jupiter</groupId>
+						<artifactId>junit-jupiter-engine</artifactId>
+						<version>5.6.0-RC1</version>
+					</dependency>
+				</dependencies>
+				<configuration>
+					<excludes>
+						<exclude>**/*IT.java</exclude>
+					</excludes>
+				</configuration>
+				<executions>
+					<execution>
+						<id>integration-test</id>
+						<goals>
+							<goal>test</goal>
+						</goals>
+						<phase>integration-test</phase>
+						<configuration>
+							<excludes>
+								<exclude>none</exclude>
+							</excludes>
+							<includes>
+								<include>**/*IT.java</include>
+							</includes>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.5</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>jacoco-report</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>jacoco-report-int</id>
+						<phase>integration-test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.1.0</version>
+				<configuration>
+					<delimiters>
+						<delimiter>@</delimiter>
+					</delimiters>
+					<useDefaultDelimiters>false</useDefaultDelimiters>
+				</configuration>
+			</plugin>
+		</plugins>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+	</build>
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-report-plugin</artifactId>
+				<version>3.0.0-M4</version>
+			</plugin>
+			<!-- ====================================================================== -->
+			<!-- REPORTING PROPERTIES -->
+			<!-- ====================================================================== -->
+			<plugin>
+				<groupId>com.github.spotbugs</groupId>
+				<artifactId>spotbugs-maven-plugin</artifactId>
+				<version>3.1.8</version>
+				<configuration>
+					<failOnError>false</failOnError>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
+
+
+</project>

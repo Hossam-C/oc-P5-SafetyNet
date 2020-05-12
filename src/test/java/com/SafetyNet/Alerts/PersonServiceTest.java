@@ -4,6 +4,7 @@ package com.SafetyNet.Alerts;
 import com.SafetyNet.Alerts.DAO.PersonDAO;
 import com.SafetyNet.Alerts.DAO.PersonDAOImpl;
 import com.SafetyNet.Alerts.DTO.PersonDTO;
+import com.SafetyNet.Alerts.DTO.PersonListDTO;
 import com.SafetyNet.Alerts.Model.Persons;
 import com.SafetyNet.Alerts.Service.PersonneService;
 import org.junit.Before;
@@ -11,10 +12,7 @@ import org.junit.Test;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockingDetails;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -29,7 +27,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.InstanceOfAssertFactories.list;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 
@@ -45,6 +45,10 @@ public class PersonServiceTest {
     private Persons persons = new Persons();
 
     private PersonDTO personDTO = new PersonDTO();
+
+    private PersonListDTO personListDTO = new PersonListDTO();
+
+    private List<Persons> lperson = new ArrayList<>();
 
     @Before
     public void setUp(){
@@ -66,6 +70,9 @@ public class PersonServiceTest {
         personDTO.setZip(96385);
         personDTO.setPhone("444-444-4444");
         personDTO.setEmail("testD@email.com");
+
+
+        lperson.add(persons);
     }
 
 
@@ -73,17 +80,18 @@ public class PersonServiceTest {
     public void personneServiceIdTest(){
 
 
-        when(personDAO.personId(anyString(),anyString())).thenReturn(persons);
+        when(personDAO.personId(anyString(),anyString())).thenReturn(lperson);
 
-        PersonDTO personDTO = personneService.personneIdService("TestA","Test1");
+        PersonListDTO personListDTO = personneService.personneIdService("TestA","Test1");
 
-        assertThat(personDTO.getFirstName()).isEqualTo("TestD");
-        assertThat(personDTO.getLastName()).isEqualTo("Test4");
-        assertThat(personDTO.getAddress()).isEqualTo("40 Test St");
-        assertThat(personDTO.getCity()).isEqualTo("TestCity");
-        assertThat(personDTO.getZip()).isEqualTo(96385);
-        assertThat(personDTO.getPhone()).isEqualTo("444-444-4444");
-        assertThat(personDTO.getEmail()).isEqualTo("testD@email.com");
+
+        assertThat(personListDTO.getPersonListDTO().get(0).getFirstName()).isEqualTo("TestD");
+        assertThat(personListDTO.getPersonListDTO().get(0).getLastName()).isEqualTo("Test4");
+        assertThat(personListDTO.getPersonListDTO().get(0).getAddress()).isEqualTo("40 Test St");
+        assertThat(personListDTO.getPersonListDTO().get(0).getCity()).isEqualTo("TestCity");
+        assertThat(personListDTO.getPersonListDTO().get(0).getZip()).isEqualTo(96385);
+        assertThat(personListDTO.getPersonListDTO().get(0).getPhone()).isEqualTo("444-444-4444");
+        assertThat(personListDTO.getPersonListDTO().get(0).getEmail()).isEqualTo("testD@email.com");
     }
 
     @Test
@@ -121,15 +129,19 @@ public class PersonServiceTest {
         assertThat(listPersonDTO.get(1).getZip()).isEqualTo(99999);
         assertThat(listPersonDTO.get(1).getPhone()).isEqualTo("555-555-5555");
         assertThat(listPersonDTO.get(1).getEmail()).isEqualTo("testE@email.com");
+
+        verify(personDAO, Mockito.times(1)).personAll();
     }
 
     @Test
     public void personneServiceAddNonExistingPersonTest() throws IOException {
 
+        List<Persons> lpers = new ArrayList<>();
 
-        when(personDAO.personId(anyString(),anyString())).thenReturn(null);
+        when(personDAO.personId(anyString(),anyString())).thenReturn(lpers);
 
         assertTrue(personneService.personneServiceAdd(personDTO));
+        verify(personDAO, Mockito.times(1)).addPerson(any());
 
     }
 
@@ -137,18 +149,26 @@ public class PersonServiceTest {
     public void personneServiceAddExistingPersonTest() throws IOException {
 
 
-        when(personDAO.personId(anyString(), anyString())).thenReturn(persons);
+        when(personDAO.personId(anyString(), anyString())).thenReturn(lperson);
 
         assertFalse(personneService.personneServiceAdd(personDTO));
+
+        // verify that the addPerson is not called because the person already exists
+        verify(personDAO, Mockito.times(0)).addPerson(any());
     }
 
     @Test
     public void personneServiceModNonExistingPersonTest() throws IOException {
 
+        List<Persons> lpers = new ArrayList<>();
 
-        when(personDAO.personId(anyString(),anyString())).thenReturn(null);
+        when(personDAO.personId(anyString(),anyString())).thenReturn(lpers);
 
         assertFalse(personneService.personneServiceMod(personDTO));
+
+
+        // verify that the updatePerson is not called because the person doesn't exist
+        verify(personDAO, Mockito.times(0)).updatePerson(any());
 
     }
 
@@ -156,18 +176,24 @@ public class PersonServiceTest {
     public void personneServiceModExistingPersonTest() throws IOException {
 
 
-        when(personDAO.personId(anyString(), anyString())).thenReturn(persons);
+        when(personDAO.personId(anyString(), anyString())).thenReturn(lperson);
 
         assertTrue(personneService.personneServiceMod(personDTO));
+
+        verify(personDAO, Mockito.times(1)).updatePerson(any());
     }
 
     @Test
     public void personneServiceDelNonExistingPersonTest() throws IOException {
 
+        List<Persons> lpers = new ArrayList<>();
 
-        when(personDAO.personId(anyString(),anyString())).thenReturn(null);
+        when(personDAO.personId(anyString(),anyString())).thenReturn(lpers);
 
         assertFalse(personneService.personneServiceDel("TestD","Test4"));
+
+        // verify that the deletePerson is not called because the person doesn't exist
+        verify(personDAO, Mockito.times(0)).deletePerson(anyString(),anyString());
 
     }
 
@@ -175,8 +201,10 @@ public class PersonServiceTest {
     public void personneServiceDelExistingPersonTest() throws IOException {
 
 
-        when(personDAO.personId(anyString(), anyString())).thenReturn(persons);
+        when(personDAO.personId(anyString(), anyString())).thenReturn(lperson);
 
         assertTrue(personneService.personneServiceDel("TestD","Test4"));
+
+        verify(personDAO, Mockito.times(1)).deletePerson(anyString(),anyString());
     }
 }

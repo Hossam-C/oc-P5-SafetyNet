@@ -13,6 +13,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -31,7 +32,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 
@@ -52,7 +55,9 @@ public class MedicalRecordServiceTest {
 
     private Persons persons = new Persons();
 
-    public static final SimpleDateFormat formatter = new SimpleDateFormat("dd/mm/yyyy", Locale.FRANCE);
+    public static final SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE);
+
+    private List<Persons> lperson = new ArrayList<>();
 
     @Before
     public void setUp(){
@@ -81,7 +86,7 @@ public class MedicalRecordServiceTest {
 
         medicalRecordDTO.setFirstName("TestM");
         medicalRecordDTO.setLastName("Test8");
-        medicalRecordDTO.setBirthdate("01/01/2000");
+        medicalRecordDTO.setSbirthdate("01/01/2000");
         medicalRecordDTO.setMedications(medications);
         medicalRecordDTO.setAllergies(allergies);
 
@@ -93,6 +98,8 @@ public class MedicalRecordServiceTest {
         persons.setZip(96385);
         persons.setPhone("444-444-4444");
         persons.setEmail("testD@email.com");
+
+        lperson.add(persons);
 
     }
 
@@ -106,12 +113,14 @@ public class MedicalRecordServiceTest {
 
         assertThat(medicalRecordDTO.getFirstName()).isEqualTo("TestM");
         assertThat(medicalRecordDTO.getLastName()).isEqualTo("Test8");
-        assertThat(medicalRecordDTO.getBirthdate()).isEqualTo("01/01/2000");
+        assertThat(medicalRecordDTO.getSbirthdate()).isEqualTo("01/01/2000");
         assertThat(medicalRecordDTO.getMedications().get(0)).isEqualTo("med1:100mg");
         assertThat(medicalRecordDTO.getMedications().get(1)).isEqualTo("med2:200mg");
         assertThat(medicalRecordDTO.getMedications().get(2)).isEqualTo("med3:300mg");
         assertThat(medicalRecordDTO.getAllergies().get(0)).isEqualTo("hays");
         assertThat(medicalRecordDTO.getAllergies().get(1)).isEqualTo("peanut");
+
+        verify(medicalRecordDAO, Mockito.times(1)).medicalRecordId(anyString(),anyString());
 
     }
 
@@ -149,7 +158,7 @@ public class MedicalRecordServiceTest {
 
         assertThat(listMedicalRecordDTO.get(0).getFirstName()).isEqualTo("TestM");
         assertThat(listMedicalRecordDTO.get(0).getLastName()).isEqualTo("Test8");
-        assertThat(listMedicalRecordDTO.get(0).getBirthdate()).isEqualTo("01/01/2000");
+        assertThat(listMedicalRecordDTO.get(0).getSbirthdate()).isEqualTo("01/01/2000");
         assertThat(listMedicalRecordDTO.get(0).getMedications().get(0)).isEqualTo("med1:100mg");
         assertThat(listMedicalRecordDTO.get(0).getMedications().get(1)).isEqualTo("med2:200mg");
         assertThat(listMedicalRecordDTO.get(0).getMedications().get(2)).isEqualTo("med3:300mg");
@@ -158,41 +167,53 @@ public class MedicalRecordServiceTest {
 
         assertThat(listMedicalRecordDTO.get(1).getFirstName()).isEqualTo("TestN");
         assertThat(listMedicalRecordDTO.get(1).getLastName()).isEqualTo("Test9");
-        assertThat(listMedicalRecordDTO.get(1).getBirthdate()).isEqualTo("09/09/2009");
+        assertThat(listMedicalRecordDTO.get(1).getSbirthdate()).isEqualTo("09/09/2009");
         assertThat(listMedicalRecordDTO.get(1).getMedications().get(0)).isEqualTo("med11:400mg");
         assertThat(listMedicalRecordDTO.get(1).getMedications().get(1)).isEqualTo("med22:500mg");
         assertThat(listMedicalRecordDTO.get(1).getMedications().get(2)).isEqualTo("med33:600mg");
         assertThat(listMedicalRecordDTO.get(1).getAllergies().get(0)).isEqualTo("gluten");
+
+        verify(medicalRecordDAO, Mockito.times(1)).medicalRecordsAll();
     }
 
     @Test
     public void medicalRecordServiceAddNonExistingMedicalRecordTestAndExistingPerson() throws IOException {
 
 
-        when(personDAO.personId(anyString(), anyString())).thenReturn(persons);
+        when(personDAO.personId(anyString(), anyString())).thenReturn(lperson);
         when(medicalRecordDAO.medicalRecordId(anyString(),anyString())).thenReturn(null);
 
         assertTrue(medicalRecordService.medicalRecordServiceAdd(medicalRecordDTO));
 
+        verify(medicalRecordDAO, Mockito.times(1)).addMedicalRecord(any());
+
     }
 
     @Test
-    public void medicalRecordServiceAddNonExistingPerson() throws IOException {
+    public void medicalRecordServiceAddNonExistingPersonNonExistingMedicalRecord() throws IOException {
 
+        //List<Persons> lpers = new ArrayList<>();
 
         when(personDAO.personId(anyString(), anyString())).thenReturn(null);
+        when(medicalRecordDAO.medicalRecordId(anyString(),anyString())).thenReturn(null);
 
         assertFalse(medicalRecordService.medicalRecordServiceAdd(medicalRecordDTO));
+
+        //verify that addMedicalRecord is not called because the person doesn't exist
+        verify(medicalRecordDAO, Mockito.times(0)).addMedicalRecord(any());
     }
 
     @Test
     public void medicalRecordServiceAddExistingPersonAndMedicalRecordTest() throws IOException {
 
 
-        when(personDAO.personId(anyString(), anyString())).thenReturn(persons);
+        when(personDAO.personId(anyString(), anyString())).thenReturn(lperson);
         when(medicalRecordDAO.medicalRecordId(anyString(),anyString())).thenReturn(medicalrecords);
 
         assertFalse(medicalRecordService.medicalRecordServiceAdd(medicalRecordDTO));
+
+        //verify that the addMedicalRecord is not called because the medicalRecord doesn't exist
+        verify(medicalRecordDAO, Mockito.times(0)).addMedicalRecord(any());
     }
 
     @Test
@@ -203,6 +224,9 @@ public class MedicalRecordServiceTest {
 
         assertFalse(medicalRecordService.medicalRecordServiceMod(medicalRecordDTO));
 
+        //verify that the updateMedicalRecord is not called because the medicalRecord doesn't exist
+        verify(medicalRecordDAO, Mockito.times(0)).updateMedicalRecord(any());
+
     }
 
     @Test
@@ -212,6 +236,8 @@ public class MedicalRecordServiceTest {
         when(medicalRecordDAO.medicalRecordId(anyString(), anyString())).thenReturn(medicalrecords);
 
         assertTrue(medicalRecordService.medicalRecordServiceMod(medicalRecordDTO));
+
+        verify(medicalRecordDAO, Mockito.times(0)).addMedicalRecord(any());
     }
 
     @Test
@@ -222,6 +248,9 @@ public class MedicalRecordServiceTest {
 
         assertFalse(medicalRecordService.medicalRecordServiceDel("TestD","Test4"));
 
+        //verify that the deleteMedicalRecord is not called because the medicalRecord doesn't exist
+        verify(medicalRecordDAO, Mockito.times(0)).deleteMedicalRecord(anyString(),anyString());
+
     }
 
     @Test
@@ -231,5 +260,7 @@ public class MedicalRecordServiceTest {
         when(medicalRecordDAO.medicalRecordId(anyString(), anyString())).thenReturn(medicalrecords);
 
         assertTrue(medicalRecordService.medicalRecordServiceDel("TestD","Test4"));
+
+        verify(medicalRecordDAO, Mockito.times(1)).deleteMedicalRecord(anyString(),anyString());
     }
 }

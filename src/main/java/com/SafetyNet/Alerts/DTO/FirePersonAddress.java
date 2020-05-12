@@ -1,23 +1,23 @@
-package com.SafetyNet.Alerts.Model;
+package com.SafetyNet.Alerts.DTO;
 
-
-import java.util.Date;
 import java.util.List;
 
-public class Medicalrecords {
+public class FirePersonAddress {
+
 
     private String firstName;
     private String lastName;
-    private Date birthdate;
-    private List<String> medications;
-    private List<String> allergies;
+    private String phone;
+    private int age;
+    List<String> medications;
+    List<String> allergies;
 
     public String getFirstName() {
         return firstName;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setFirstName(String firsName) {
+        this.firstName = firsName;
     }
 
     public String getLastName() {
@@ -28,18 +28,20 @@ public class Medicalrecords {
         this.lastName = lastName;
     }
 
-    public Date getBirthdate() {
-        if (birthdate == null){
-            return null;
-        }else {
-            Date birthDate = birthdate;
-            return birthDate;
-        }
+    public String getPhone() {
+        return phone;
     }
 
-    public void setBirthdate(Date birthdate) {
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
-        this.birthdate = new Date(birthdate.getTime());
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 
     public List<String> getMedications() {

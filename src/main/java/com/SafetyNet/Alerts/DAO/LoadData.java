@@ -6,40 +6,28 @@ import com.SafetyNet.Alerts.Model.Medicalrecords;
 import com.SafetyNet.Alerts.Model.Persons;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
-import org.springframework.core.env.Environment;
 
+import javax.annotation.PostConstruct;
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 @Component
-//@Configuration
-//@PropertySource(value={"classpath:application.properties"})
 public class LoadData {
 
 
-    private List<Persons> lpersons = new ArrayList<Persons>();
-    private List<Firestations> lfirestations = new ArrayList<Firestations>();
-    private List<Medicalrecords> lmedicalRecords = new ArrayList<Medicalrecords>();
-
-
+    public  final SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE);
+    private final List<Persons> lpersons = new ArrayList<Persons>();
+    private final List<Firestations> lfirestations = new ArrayList<Firestations>();
+    private final List<Medicalrecords> lmedicalRecords = new ArrayList<Medicalrecords>();
     @Value("${filepath}")
     private String pathfile;
 
-    public static final SimpleDateFormat formatter = new SimpleDateFormat("dd/mm/yyyy", Locale.FRANCE);
-
-
-    @Autowired
+    @PostConstruct
     public void loadData() throws Exception {
         JsonNode masterJson;
         ObjectMapper mapper = new ObjectMapper();
@@ -80,13 +68,13 @@ public class LoadData {
             medicalrecords.setBirthdate(formatter.parse(node.get("birthdate").asText()));
 
             JsonNode medic = node.at("/medications");
-            for (JsonNode nodem : medic ){
+            for (JsonNode nodem : medic) {
                 medication.add(nodem.textValue());
             }
             medicalrecords.setMedications(medication);
 
             JsonNode allerg = node.at("/allergies");
-            for (JsonNode nodea : allerg ){
+            for (JsonNode nodea : allerg) {
                 allergie.add(nodea.textValue());
             }
             medicalrecords.setAllergies(allergie);
@@ -94,18 +82,18 @@ public class LoadData {
         }
     }
 
+    @PostConstruct
+    public void linkData() {
 
-    public void linkData(){
-
-        for (Persons persons : this.lpersons){
-            for(Firestations firestation : this.lfirestations){
-                if (persons.getAddress().equals(firestation.getAddress())){
+        for (Persons persons : this.lpersons) {
+            for (Firestations firestation : this.lfirestations) {
+                if (persons.getAddress().equals(firestation.getAddress())) {
                     persons.setFirestations(firestation);
                     break;
                 }
             }
-            for(Medicalrecords medicalrecord : this.lmedicalRecords){
-                if (persons.getFirstName().equals(medicalrecord.getFirstName()) && persons.getLastName().equals(medicalrecord.getLastName()) ){
+            for (Medicalrecords medicalrecord : this.lmedicalRecords) {
+                if (persons.getFirstName().equals(medicalrecord.getFirstName()) && persons.getLastName().equals(medicalrecord.getLastName())) {
                     persons.setMedicalrecords(medicalrecord);
                     break;
                 }
@@ -113,11 +101,11 @@ public class LoadData {
         }
     }
 
-    public void linkPersonFirestation(){
+    public void linkPersonFirestation() {
 
-        for (Persons persons : this.lpersons){
-            for(Firestations firestation : this.lfirestations){
-                if (persons.getAddress().equals(firestation.getAddress())){
+        for (Persons persons : this.lpersons) {
+            for (Firestations firestation : this.lfirestations) {
+                if (persons.getAddress().equals(firestation.getAddress())) {
                     persons.setFirestations(firestation);
                     break;
                 }
@@ -126,11 +114,11 @@ public class LoadData {
     }
 
 
-    public void linkPersonMedicalRecord(){
+    public void linkPersonMedicalRecord() {
 
-        for (Persons persons : this.lpersons){
-            for(Medicalrecords medicalrecord : this.lmedicalRecords){
-                if (persons.getFirstName().equals(medicalrecord.getFirstName()) && persons.getLastName().equals(medicalrecord.getLastName()) ){
+        for (Persons persons : this.lpersons) {
+            for (Medicalrecords medicalrecord : this.lmedicalRecords) {
+                if (persons.getFirstName().equals(medicalrecord.getFirstName()) && persons.getLastName().equals(medicalrecord.getLastName())) {
                     persons.setMedicalrecords(medicalrecord);
                     break;
                 }
@@ -139,20 +127,22 @@ public class LoadData {
     }
 
 
-    public List<Persons> getPersons() {return lpersons; }
+    public List<Persons> getPersons() {
+        return lpersons;
+    }
 
 
-    public List<Firestations> getFirestations(){
+    public List<Firestations> getFirestations() {
         return this.lfirestations;
     }
 
 
-    public List<Medicalrecords> getMedicalRecords(){
+    public List<Medicalrecords> getMedicalRecords() {
         return this.lmedicalRecords;
     }
 
 
-    public void clearData(){
+    public void clearData() {
         lpersons.clear();
         lfirestations.clear();
         lmedicalRecords.clear();

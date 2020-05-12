@@ -5,6 +5,7 @@ import com.SafetyNet.Alerts.Controller.PersonController;
 import com.SafetyNet.Alerts.DTO.FirestationDTO;
 import com.SafetyNet.Alerts.Service.ControlDataIn;
 import com.SafetyNet.Alerts.Service.FirestationService;
+import com.SafetyNet.Alerts.Service.JsonToStringService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -35,6 +38,9 @@ public class FirestationControllerTest {
 
     @Autowired
     private MockMvc mvc;
+
+    @MockBean
+    private JsonToStringService jsonToStringService;
 
     @MockBean
     private ControlDataIn controlDataIn ;
@@ -85,36 +91,17 @@ public class FirestationControllerTest {
             e.printStackTrace();
         }
 
-
+        verify(firestationService, Mockito.times(1)).firestationServiceAll();
     }
 
-/*    @Test
-    public void firestationControllerGetFirestationAdr() throws IOException {
-
-        String jsonResult = mapper.writeValueAsString(firestationDTO1);
-
-
-        when(firestationService.firestationIdService(Mockito.any())).thenReturn(firestationDTO1);
-
-        try {
-            mvc.perform(get("/firestation")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .param("adresse","11 Fire St"))
-                    .andDo(print())
-                    .andExpect(status().isOk())
-                    .andExpect(content().json(jsonResult));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }*/
 
     @Test
     public void firestationControllerAddNonExistingFirestationNonMissingInfo() throws IOException {
 
         String jsonResult = mapper.writeValueAsString(firestationDTO1);
 
-        when(controlDataIn.controlFirestation(Mockito.any())).thenReturn("");
-        when(firestationService.firestationServiceAdd(Mockito.any())).thenReturn(true);
+        when(controlDataIn.controlFirestation(any())).thenReturn("");
+        when(firestationService.firestationServiceAdd(any())).thenReturn(true);
 
 
         try {
@@ -127,6 +114,9 @@ public class FirestationControllerTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        verify(firestationService, Mockito.times(1)).firestationServiceAdd(any());
+
     }
 
     @Test
@@ -134,8 +124,8 @@ public class FirestationControllerTest {
 
         String jsonResult = mapper.writeValueAsString(firestationDTO1);
 
-        when(controlDataIn.controlFirestation(Mockito.any())).thenReturn("Donnees manquantes");
-        when(firestationService.firestationServiceAdd(Mockito.any())).thenReturn(false);
+        when(controlDataIn.controlFirestation(any())).thenReturn("Donnees manquantes");
+        when(firestationService.firestationServiceAdd(any())).thenReturn(false);
 
 
         try {
@@ -149,6 +139,9 @@ public class FirestationControllerTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        //Verify that the service is not called because of missing infos
+        verify(firestationService, Mockito.times(0)).firestationServiceAdd(any());
     }
 
     @Test
@@ -156,8 +149,8 @@ public class FirestationControllerTest {
 
         String jsonResult = mapper.writeValueAsString(firestationDTO1);
 
-        when(controlDataIn.controlFirestation(Mockito.any())).thenReturn("");
-        when(firestationService.firestationServiceAdd(Mockito.any())).thenReturn(false);
+        when(controlDataIn.controlFirestation(any())).thenReturn("");
+        when(firestationService.firestationServiceAdd(any())).thenReturn(false);
 
 
         try {
@@ -171,6 +164,8 @@ public class FirestationControllerTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        verify(firestationService, Mockito.times(1)).firestationServiceAdd(any());
     }
 
     @Test
@@ -178,8 +173,8 @@ public class FirestationControllerTest {
 
         String jsonResult = mapper.writeValueAsString(firestationDTO1);
 
-        when(controlDataIn.controlFirestation(Mockito.any())).thenReturn("");
-        when(firestationService.firestationServiceMod(Mockito.any())).thenReturn(false);
+        when(controlDataIn.controlFirestation(any())).thenReturn("");
+        when(firestationService.firestationServiceMod(any())).thenReturn(false);
 
 
         try {
@@ -193,6 +188,8 @@ public class FirestationControllerTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        verify(firestationService, Mockito.times(1)).firestationServiceMod(any());
     }
 
     @Test
@@ -200,8 +197,8 @@ public class FirestationControllerTest {
 
         String jsonResult = mapper.writeValueAsString(firestationDTO1);
 
-        when(controlDataIn.controlFirestation(Mockito.any())).thenReturn("Donnees manquantes");
-        when(firestationService.firestationServiceMod(Mockito.any())).thenReturn(false);
+        when(controlDataIn.controlFirestation(any())).thenReturn("Donnees manquantes");
+        when(firestationService.firestationServiceMod(any())).thenReturn(false);
 
 
         try {
@@ -215,6 +212,9 @@ public class FirestationControllerTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        //Verify that the service is not called because of missing infos
+        verify(firestationService, Mockito.times(0)).firestationServiceMod(any());
     }
 
     @Test
@@ -222,8 +222,8 @@ public class FirestationControllerTest {
 
         String jsonResult = mapper.writeValueAsString(firestationDTO1);
 
-        when(controlDataIn.controlFirestation(Mockito.any())).thenReturn("");
-        when(firestationService.firestationServiceMod(Mockito.any())).thenReturn(true);
+        when(controlDataIn.controlFirestation(any())).thenReturn("");
+        when(firestationService.firestationServiceMod(any())).thenReturn(true);
 
 
         try {
@@ -236,12 +236,14 @@ public class FirestationControllerTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        verify(firestationService, Mockito.times(1)).firestationServiceMod(any());
     }
 
     @Test
     public void firestationControllerDelExistingFirestation() throws IOException {
 
-        when(firestationService.firestationServiceDel(Mockito.any())).thenReturn(true);
+        when(firestationService.firestationServiceDel(any())).thenReturn(true);
 
 
         try {
@@ -253,12 +255,14 @@ public class FirestationControllerTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        verify(firestationService, Mockito.times(1)).firestationServiceDel(any());
     }
 
     @Test
     public void firestationControllerDelNonExistingFirestation() throws IOException {
 
-        when(firestationService.firestationServiceDel(Mockito.any())).thenReturn(false);
+        when(firestationService.firestationServiceDel(any())).thenReturn(false);
 
 
         try {
@@ -271,5 +275,7 @@ public class FirestationControllerTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        verify(firestationService, Mockito.times(1)).firestationServiceDel(any());
     }
 }

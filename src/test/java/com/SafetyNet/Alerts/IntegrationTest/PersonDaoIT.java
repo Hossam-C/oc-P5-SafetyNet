@@ -2,6 +2,7 @@ package com.SafetyNet.Alerts.IntegrationTest;
 
 import com.SafetyNet.Alerts.DAO.LoadData;
 import com.SafetyNet.Alerts.DAO.PersonDAO;
+import com.SafetyNet.Alerts.DTO.PersonListDTO;
 import com.SafetyNet.Alerts.Model.Persons;
 import org.junit.After;
 import org.junit.Before;
@@ -32,6 +33,8 @@ public class PersonDaoIT {
     @Autowired
     private PersonDAO personDAO;
 
+    private PersonListDTO personListDTO = new PersonListDTO();
+
     @After
     public void setAfter() throws Exception {
 
@@ -44,7 +47,7 @@ public class PersonDaoIT {
     public void personAllTest() throws IOException {
 
         //System.out.print(loadData.getPersons());
-        assertThat(personDAO.personAll().size()).isEqualTo(3);
+        assertThat(personDAO.personAll().size()).isEqualTo(7);
         assertThat(personDAO.personAll().get(0).getFirstName()).isEqualTo("TestA");
         assertThat(personDAO.personAll().get(1).getLastName()).isEqualTo("Test2");
 
@@ -53,29 +56,29 @@ public class PersonDaoIT {
     @Test
     public void existingPersonIdTest() throws IOException {
 
-        assertThat(personDAO.personId("TestA","Test1").getAddress()).isEqualTo("10 Test St");
-        assertThat(personDAO.personId("TestA","Test1").getCity()).isEqualTo("TestCity");
-        assertThat(personDAO.personId("TestA","Test1").getZip()).isEqualTo(12345);
-        assertThat(personDAO.personId("TestA","Test1").getPhone()).isEqualTo("111-111-1111");
-        assertThat(personDAO.personId("TestA","Test1").getEmail()).isEqualTo("testA@email.com");
+        assertThat(personDAO.personId("TestA","Test1").get(0).getAddress()).isEqualTo("10 Test St");
+        assertThat(personDAO.personId("TestA","Test1").get(0).getCity()).isEqualTo("TestCity");
+        assertThat(personDAO.personId("TestA","Test1").get(0).getZip()).isEqualTo(12345);
+        assertThat(personDAO.personId("TestA","Test1").get(0).getPhone()).isEqualTo("111-111-1111");
+        assertThat(personDAO.personId("TestA","Test1").get(0).getEmail()).isEqualTo("testA@email.com");
 
-        assertThat(personDAO.personId("TestB","Test2").getAddress()).isEqualTo("20 Test St");
-        assertThat(personDAO.personId("TestB","Test2").getCity()).isEqualTo("TestCity");
-        assertThat(personDAO.personId("TestB","Test2").getZip()).isEqualTo(67890);
-        assertThat(personDAO.personId("TestB","Test2").getPhone()).isEqualTo("222-222-2222");
-        assertThat(personDAO.personId("TestB","Test2").getEmail()).isEqualTo("testB@email.com");
+        assertThat(personDAO.personId("TestB","Test2").get(0).getAddress()).isEqualTo("20 Test St");
+        assertThat(personDAO.personId("TestB","Test2").get(0).getCity()).isEqualTo("TestCity");
+        assertThat(personDAO.personId("TestB","Test2").get(0).getZip()).isEqualTo(67890);
+        assertThat(personDAO.personId("TestB","Test2").get(0).getPhone()).isEqualTo("222-222-2222");
+        assertThat(personDAO.personId("TestB","Test2").get(0).getEmail()).isEqualTo("testB@email.com");
 
-        assertThat(personDAO.personId("TestC","Test3").getAddress()).isEqualTo("30 Test St");
-        assertThat(personDAO.personId("TestC","Test3").getCity()).isEqualTo("TestCity");
-        assertThat(personDAO.personId("TestC","Test3").getZip()).isEqualTo(97451);
-        assertThat(personDAO.personId("TestC","Test3").getPhone()).isEqualTo("333-333-3333");
-        assertThat(personDAO.personId("TestC","Test3").getEmail()).isEqualTo("testC@email.com");
+        assertThat(personDAO.personId("TestC","Test3").get(0).getAddress()).isEqualTo("30 Test St");
+        assertThat(personDAO.personId("TestC","Test3").get(0).getCity()).isEqualTo("TestCity");
+        assertThat(personDAO.personId("TestC","Test3").get(0).getZip()).isEqualTo(97451);
+        assertThat(personDAO.personId("TestC","Test3").get(0).getPhone()).isEqualTo("333-333-3333");
+        assertThat(personDAO.personId("TestC","Test3").get(0).getEmail()).isEqualTo("testC@email.com");
     }
 
     @Test
     public void nonExistingPersonIdTest() throws IOException {
 
-        assertThat(personDAO.personId("TestZ","Test9")).isEqualTo(null);
+        assertThat(personDAO.personId("TestZ","Test9")).isEmpty();
 
     }
 
@@ -83,21 +86,21 @@ public class PersonDaoIT {
     public void personAddTest() throws IOException {
 
         Persons persons = new Persons();
-        persons.setFirstName("TestD");
-        persons.setLastName("Test4");
-        persons.setAddress("40 Test St");
+        persons.setFirstName("TestZ");
+        persons.setLastName("Test9");
+        persons.setAddress("99 Test St");
         persons.setCity("TestCity");
         persons.setZip(96385);
-        persons.setPhone("444-444-4444");
-        persons.setEmail("testD@email.com");
+        persons.setPhone("999-999-9999");
+        persons.setEmail("testZ@email.com");
 
         personDAO.addPerson(persons);
 
-        assertThat(personDAO.personId("TestD","Test4").getAddress()).isEqualTo("40 Test St");
-        assertThat(personDAO.personId("TestD","Test4").getCity()).isEqualTo("TestCity");
-        assertThat(personDAO.personId("TestD","Test4").getZip()).isEqualTo(96385);
-        assertThat(personDAO.personId("TestD","Test4").getPhone()).isEqualTo("444-444-4444");
-        assertThat(personDAO.personId("TestD","Test4").getEmail()).isEqualTo("testD@email.com");
+        assertThat(personDAO.personId("TestZ","Test9").get(0).getAddress()).isEqualTo("99 Test St");
+        assertThat(personDAO.personId("TestZ","Test9").get(0).getCity()).isEqualTo("TestCity");
+        assertThat(personDAO.personId("TestZ","Test9").get(0).getZip()).isEqualTo(96385);
+        assertThat(personDAO.personId("TestZ","Test9").get(0).getPhone()).isEqualTo("999-999-9999");
+        assertThat(personDAO.personId("TestZ","Test9").get(0).getEmail()).isEqualTo("testZ@email.com");
 
     }
 
@@ -115,11 +118,11 @@ public class PersonDaoIT {
 
         personDAO.updatePerson(persons);
 
-        assertThat(personDAO.personId("TestA","Test1").getAddress()).isEqualTo("99 Test St");
-        assertThat(personDAO.personId("TestA","Test1").getCity()).isEqualTo("TestCity2");
-        assertThat(personDAO.personId("TestA","Test1").getZip()).isEqualTo(99999);
-        assertThat(personDAO.personId("TestA","Test1").getPhone()).isEqualTo("999-999-9999");
-        assertThat(personDAO.personId("TestA","Test1").getEmail()).isEqualTo("testA@email.com");
+        assertThat(personDAO.personId("TestA","Test1").get(0).getAddress()).isEqualTo("99 Test St");
+        assertThat(personDAO.personId("TestA","Test1").get(0).getCity()).isEqualTo("TestCity2");
+        assertThat(personDAO.personId("TestA","Test1").get(0).getZip()).isEqualTo(99999);
+        assertThat(personDAO.personId("TestA","Test1").get(0).getPhone()).isEqualTo("999-999-9999");
+        assertThat(personDAO.personId("TestA","Test1").get(0).getEmail()).isEqualTo("testA@email.com");
 
     }
 
@@ -130,7 +133,7 @@ public class PersonDaoIT {
         boolean retour = personDAO.deletePerson("TestA", "Test1");
 
         assertThat(retour).isEqualTo(true);
-        assertThat(personDAO.personId("TestA", "Test1")).isEqualTo(null);
+        assertThat(personDAO.personId("TestA", "Test1")).isEmpty();
     }
 
     @Test
@@ -140,7 +143,7 @@ public class PersonDaoIT {
         boolean retour = personDAO.deletePerson("TestZ", "Test9");
 
         assertThat(retour).isEqualTo(false);
-        assertThat(personDAO.personId("TestZ", "Test9")).isEqualTo(null);
+        assertThat(personDAO.personId("TestZ", "Test9")).isEmpty();
     }
 
 }

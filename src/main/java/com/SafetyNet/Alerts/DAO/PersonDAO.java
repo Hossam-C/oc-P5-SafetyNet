@@ -7,13 +7,17 @@ import java.util.List;
 
 public interface PersonDAO {
 
-    public List<Persons> personAll() throws IOException;
+    List<Persons> personAll() throws IOException;
 
-    public Persons personId(String firstname, String lastname);
+    List<Persons> personId(String firstname, String lastname);
 
-    public void addPerson(Persons person);
+    void addPerson(Persons person);
 
-    public void updatePerson(Persons person);
+    void updatePerson(Persons person);
 
-    public boolean deletePerson(String firstname, String lastname);
+    boolean deletePerson(String firstname, String lastname);
+
+    List<Persons> personStation(int stationNumber);
+
+    List<Persons> personAddress(String address);
 }

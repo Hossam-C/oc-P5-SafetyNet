@@ -1,0 +1,28 @@
+{
+    "persons": [
+        { "firstName":"TestA", "lastName":"Test1", "address":"10 Test St", "city":"TestCity", "zip":"12345", "phone":"111-111-1111", "email":"testA@email.com" },
+        { "firstName":"TestB", "lastName":"Test2", "address":"20 Test St", "city":"TestCity", "zip":"67890", "phone":"222-222-2222", "email":"testB@email.com" },
+        { "firstName":"TestC", "lastName":"Test3", "address":"30 Test St", "city":"TestCity", "zip":"97451", "phone":"333-333-3333", "email":"testC@email.com" },
+        { "firstName":"TestD", "lastName":"Test4", "address":"50 Test St", "city":"TestCity", "zip":"45678", "phone":"444-444-4444", "email":"testD@email.com" },
+        { "firstName":"TestE", "lastName":"Test5", "address":"50 Test St", "city":"TestCity", "zip":"45678", "phone":"555-555-5555", "email":"testE@email.com" },
+        { "firstName":"TestF", "lastName":"Test6", "address":"50 Test St", "city":"TestCity", "zip":"45678", "phone":"666-666-6666", "email":"testF@email.com" },
+        { "firstName":"TestG", "lastName":"Test7", "address":"60 Test St", "city":"TestCity", "zip":"45678", "phone":"777-777-7777", "email":"testG@email.com" }
+	], 
+    "firestations": [
+	{ "address":"10 Test St", "station":"3" },
+        { "address":"20 Test St", "station":"2" },
+        { "address":"30 Test St", "station":"3" },
+        { "address":"40 Test St", "station":"2" },
+        { "address":"50 Test St", "station":"5" },
+        { "address":"60 Test St", "station":"5" }
+	],
+    "medicalrecords": [
+        { "firstName":"TestA", "lastName":"Test1", "birthdate":"03/06/1984", "medications":["aznol:350mg", "hydrapermazol:100mg"], "allergies":["nillacilan"] },
+        { "firstName":"TestB", "lastName":"Test2", "birthdate":"03/06/1989", "medications":["pharmacol:5000mg", "terazine:10mg", "noznazol:250mg"], "allergies":[] },
+        { "firstName":"TestC", "lastName":"Test3", "birthdate":"08/06/1945", "medications":["tradoxidine:400mg"], "allergies":[] },
+        { "firstName":"TestD", "lastName":"Test4", "birthdate":"15/11/1980", "medications":["aznol:350mg", "hydrapermazol:100mg"], "allergies":["nillacilan"] },
+        { "firstName":"TestE", "lastName":"Test5", "birthdate":"16/12/1981", "medications":["pharmacol:5000mg", "terazine:10mg", "noznazol:250mg"], "allergies":[] },
+        { "firstName":"TestF", "lastName":"Test6", "birthdate":"12/09/2010", "medications":["tradoxidine:400mg"], "allergies":[] },
+        { "firstName":"TestG", "lastName":"Test7", "birthdate":"07/10/1995", "medications":["tradoxidine:400mg"], "allergies":[] }
+        ] 
+}

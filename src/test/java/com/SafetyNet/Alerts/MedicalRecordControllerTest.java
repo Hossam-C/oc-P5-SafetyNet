@@ -3,6 +3,7 @@ package com.SafetyNet.Alerts;
 import com.SafetyNet.Alerts.Controller.MedicalRecordController;
 import com.SafetyNet.Alerts.DTO.MedicalRecordDTO;
 import com.SafetyNet.Alerts.Service.ControlDataIn;
+import com.SafetyNet.Alerts.Service.JsonToStringService;
 import com.SafetyNet.Alerts.Service.MedicalRecordService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
@@ -17,10 +18,17 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -41,11 +49,18 @@ public class MedicalRecordControllerTest {
     @MockBean
     private MedicalRecordService medicalRecordService;
 
+    @MockBean
+    private JsonToStringService jsonToStringService;
+
     private MedicalRecordDTO medicalRecordDTO1 = new MedicalRecordDTO();
     private MedicalRecordDTO medicalRecordDTO2 = new MedicalRecordDTO();
     private MedicalRecordDTO medicalRecordDTO3 = new MedicalRecordDTO();
 
     private ObjectMapper mapper = new ObjectMapper();
+
+    public static final SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE);
+
+    public DateFormat dateFormat;
 
     @Before
     public void setUp(){
@@ -61,21 +76,22 @@ public class MedicalRecordControllerTest {
 
         medicalRecordDTO1.setFirstName("TestD");
         medicalRecordDTO1.setLastName("Test4");
-        medicalRecordDTO1.setBirthdate("04/04/2004");
+        medicalRecordDTO1.setSbirthdate("04/04/2004");
         medicalRecordDTO1.setMedications(medications);
         medicalRecordDTO1.setAllergies(allergies);
 
         medicalRecordDTO2.setFirstName("TestE");
         medicalRecordDTO2.setLastName("Test5");
-        medicalRecordDTO2.setBirthdate("05/05/2005");
+        medicalRecordDTO2.setSbirthdate("05/05/2005");
         medicalRecordDTO2.setMedications(medications);
         medicalRecordDTO2.setAllergies(allergies);
 
         medicalRecordDTO3.setFirstName("TestF");
         medicalRecordDTO3.setLastName("Test6");
-        medicalRecordDTO3.setBirthdate("06/06/2006");
+        medicalRecordDTO3.setSbirthdate("06/06/2006");
         medicalRecordDTO3.setMedications(medications);
         medicalRecordDTO3.setAllergies(allergies);
+
     }
 
 
@@ -102,12 +118,15 @@ public class MedicalRecordControllerTest {
             e.printStackTrace();
         }
 
+        verify(medicalRecordService, Mockito.times(1)).medicalRecordServiceAll();
+
 
     }
 
     @Test
     public void medicalRecordControllerGetMedicalRecordId() throws IOException {
 
+        mapper.setDateFormat(new SimpleDateFormat("dd/mm/yyyy", Locale.FRANCE));
         String jsonResult = mapper.writeValueAsString(medicalRecordDTO1);
 
 
@@ -125,6 +144,9 @@ public class MedicalRecordControllerTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        verify(medicalRecordService, Mockito.times(1)).medicalRecordIdService(anyString(),anyString());
+
     }
 
     @Test
@@ -146,6 +168,8 @@ public class MedicalRecordControllerTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        verify(medicalRecordService, Mockito.times(1)).medicalRecordServiceAdd(any());
     }
 
     @Test
@@ -168,6 +192,9 @@ public class MedicalRecordControllerTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        //Verify that the medicalRecordServiceAdd is not called because of missing infos
+        verify(medicalRecordService, Mockito.times(0)).medicalRecordServiceAdd(any());
     }
 
     @Test
@@ -190,6 +217,8 @@ public class MedicalRecordControllerTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        verify(medicalRecordService, Mockito.times(1)).medicalRecordServiceAdd(any());
     }
 
     @Test
@@ -212,6 +241,8 @@ public class MedicalRecordControllerTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        verify(medicalRecordService, Mockito.times(1)).medicalRecordServiceMod(any());
     }
 
     @Test
@@ -234,6 +265,9 @@ public class MedicalRecordControllerTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        //Verify that the medicalRecordServiceMod is not called because of missing infos
+        verify(medicalRecordService, Mockito.times(0)).medicalRecordServiceMod(any());
     }
 
     @Test
@@ -255,6 +289,8 @@ public class MedicalRecordControllerTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        verify(medicalRecordService, Mockito.times(1)).medicalRecordServiceMod(any());
     }
 
     @Test
@@ -273,6 +309,8 @@ public class MedicalRecordControllerTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        verify(medicalRecordService, Mockito.times(1)).medicalRecordServiceDel(anyString(),anyString());
     }
 
     @Test
@@ -292,6 +330,8 @@ public class MedicalRecordControllerTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        verify(medicalRecordService, Mockito.times(1)).medicalRecordServiceDel(anyString(),anyString());
     }
 
 }

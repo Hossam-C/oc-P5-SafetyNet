@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -28,7 +29,9 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 
@@ -59,7 +62,7 @@ public class FirestationServiceTest {
     }
 
     @Test
-    public void firestationServiceIdTest(){
+    public void firestationServiceIdTest() throws IOException {
 
 
         when(firestationsDAO.firestationAdr(anyString())).thenReturn(firestations);
@@ -68,6 +71,8 @@ public class FirestationServiceTest {
 
         assertThat(firestationDTO.getAddress()).isEqualTo("70 Test St");
         assertThat(firestationDTO.getStation()).isEqualTo(7);
+
+        verify(firestationsDAO, Mockito.times(1)).firestationAdr(anyString());
 
     }
 
@@ -93,6 +98,8 @@ public class FirestationServiceTest {
         assertThat(listFirestationDTO.get(1).getAddress()).isEqualTo("99 Test St");
         assertThat(listFirestationDTO.get(1).getStation()).isEqualTo(9);
 
+        verify(firestationsDAO, Mockito.times(1)).firestationsAll();
+
     }
 
     @Test
@@ -103,6 +110,8 @@ public class FirestationServiceTest {
 
         assertTrue(firestationService.firestationServiceAdd(firestationDTO));
 
+        verify(firestationsDAO, Mockito.times(1)).addFirestation(any());
+
     }
 
     @Test
@@ -112,6 +121,9 @@ public class FirestationServiceTest {
         when(firestationsDAO.firestationAdr(anyString())).thenReturn(firestations);
 
         assertFalse(firestationService.firestationServiceAdd(firestationDTO));
+
+        //verify that the addFirestation is not called because the firestation doesn't exist
+        verify(firestationsDAO, Mockito.times(0)).addFirestation(any());
     }
 
     @Test
@@ -122,6 +134,9 @@ public class FirestationServiceTest {
 
         assertFalse(firestationService.firestationServiceMod(firestationDTO));
 
+        //verify that the updateFirestation is not called because the firestation doesn't exist
+        verify(firestationsDAO, Mockito.times(0)).updateFirestation(any());
+
     }
 
     @Test
@@ -131,6 +146,8 @@ public class FirestationServiceTest {
         when(firestationsDAO.firestationAdr(anyString())).thenReturn(firestations);
 
         assertTrue(firestationService.firestationServiceMod(firestationDTO));
+
+        verify(firestationsDAO, Mockito.times(1)).updateFirestation(any());
     }
 
     @Test
@@ -141,6 +158,9 @@ public class FirestationServiceTest {
 
         assertFalse(firestationService.firestationServiceDel("70 Test St"));
 
+        //verify that the deleteFirestation is not called because the firestation doesn't exist
+        verify(firestationsDAO, Mockito.times(0)).deleteFirestation(any());
+
     }
 
     @Test
@@ -150,5 +170,7 @@ public class FirestationServiceTest {
         when(firestationsDAO.firestationAdr(anyString())).thenReturn(firestations);
 
         assertTrue(firestationService.firestationServiceDel("70 Test St"));
+
+        verify(firestationsDAO, Mockito.times(1)).deleteFirestation(any());
     }
 }

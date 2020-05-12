@@ -22,9 +22,9 @@ public class LoadDataIT {
 
         //loadData.loadData();
 
-        assertThat(loadData.getPersons().size()).isEqualTo(3);
-        assertThat(loadData.getFirestations().size()).isEqualTo(4);
-        assertThat(loadData.getMedicalRecords().size()).isEqualTo(3);
+        assertThat(loadData.getPersons().size()).isEqualTo(7);
+        assertThat(loadData.getFirestations().size()).isEqualTo(6);
+        assertThat(loadData.getMedicalRecords().size()).isEqualTo(7);
     }
 
     @Test

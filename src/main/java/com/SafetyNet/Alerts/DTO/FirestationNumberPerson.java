@@ -1,18 +1,12 @@
-package com.SafetyNet.Alerts.Model;
+package com.SafetyNet.Alerts.DTO;
 
-//@Component
-public class Persons {
+public class FirestationNumberPerson {
     private String firstName;
     private String lastName;
     private String address;
     private String city;
     private int zip;
     private String phone;
-    private String email;
-
-
-    private Firestations firestations;
-    private Medicalrecords medicalrecords;
 
     public String getFirstName() {
         return firstName;
@@ -60,29 +54,5 @@ public class Persons {
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Firestations getFirestations() {
-        return firestations;
-    }
-
-    public void setFirestations(Firestations firestations) {
-        this.firestations = firestations;
-    }
-
-    public Medicalrecords getMedicalrecords() {
-        return medicalrecords;
-    }
-
-    public void setMedicalrecords(Medicalrecords medicalrecords) {
-        this.medicalrecords = medicalrecords;
     }
 }

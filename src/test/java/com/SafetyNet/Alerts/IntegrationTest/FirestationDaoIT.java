@@ -37,7 +37,7 @@ public class FirestationDaoIT {
     @Test
     public void firestationAllTest() throws IOException {
 
-        assertThat(firestationsDAO.firestationsAll().size()).isEqualTo(4);
+        assertThat(firestationsDAO.firestationsAll().size()).isEqualTo(6);
         assertThat(firestationsDAO.firestationsAll().get(0).getAddress()).isEqualTo("10 Test St");
         assertThat(firestationsDAO.firestationsAll().get(1).getStation()).isEqualTo(2);
 
